@@ -42,6 +42,13 @@ def get_themes_indexes(tfidf_data, comment_text):
     result['tfidf_similarity'] = tfidf_vect
     return list(result.to_records(index=False))
 
+def get_best_similarity(tfidf_data, comment_text, limit):
+    vect = tfidf_data['dictionary'].doc2bow(list(tokenize(comment_text, lowercase=True,deacc=True)))
+    tfidf_vect = list(tfidf_data['index'][tfidf_data['tfidf'][vect]])
+    result = tfidf_data['themes'][['cat_id', 'cat_name', 'theme_id', 'theme_name']]
+    result['tfidf_similarity'] = tfidf_vect
+    return list(result.sort_values('tfidf_similarity', ascending=False).head(limit).to_records(index=False))
+
 if __name__ == '__main__':
     try:
         tfidf_data = load_tfidf_data()
@@ -49,4 +56,6 @@ if __name__ == '__main__':
         save_tfidf_data('1639156572535.csv')
         tfidf_data = load_tfidf_data()
     while True:
-        print(get_themes_indexes(tfidf_data, input('>>>>')))
+        comment_text = input('>>>>')
+        print(get_themes_indexes(tfidf_data, comment_text))
+        print(get_best_similarity(tfidf_data, comment_text, 3))
