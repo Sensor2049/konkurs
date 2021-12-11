@@ -16,7 +16,8 @@ def save_tfidf_data(csv_filename):
 
     for i in range(len(tokens)):
         corpuses[i] = dictionary.doc2bow(tokens[i] if i in tokens else [])
-
+    
+    f_cnt = len(dictionary.token2id)
     tfidf = models.TfidfModel(list(corpuses.values()))
     index = similarities.SparseMatrixSimilarity(tfidf[list(corpuses.values())], num_features = f_cnt)
 
@@ -40,6 +41,10 @@ def get_category_and_theme_id(tfidf_data, comment_text):
     return list(tfidf_data['themes'][['cat_id', 'theme_id']][tfidf_data['themes'].theme_id == pos].values[0])
 
 if __name__ == '__main__':
-    tfidf_data = load_tfidf_data()
+    try:
+        tfidf_data = load_tfidf_data()
+    except FileNotFoundError as e:
+        save_tfidf_data('1639156572535.csv')
+        tfidf_data = load_tfidf_data()
     while True:
         print(get_category_and_theme_id(tfidf_data, input('>>>>')))
