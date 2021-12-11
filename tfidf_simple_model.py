@@ -40,6 +40,6 @@ def get_category_and_theme_id(tfidf_data, comment_text):
     return list(tfidf_data['themes'][['cat_id', 'theme_id']][tfidf_data['themes'].theme_id == pos].values[0])
 
 if __name__ == '__main__':
-    tfidf_data = load_dict_tfidf_index()
+    tfidf_data = load_tfidf_data()
     while True:
         print(get_category_and_theme_id(tfidf_data, input('>>>>')))
