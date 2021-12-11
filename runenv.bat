@@ -1,0 +1,1 @@
+@cmd /K C:\Users\damir\.venvs\nlp\Scripts\activate.bat
